@@ -123,3 +123,17 @@ boolean Touch::setButton( char id, char type, int ulx, int uly, int lrx, int lry
   }
 }
 
+int Touch::readButton( char id ) {
+  if(_touched) {
+    //Check if X coordinate is within button bounds
+    if(_xPos > _buttons[id].ulX && _xPos < _buttons[id].lrX) {
+      //Check if Y coordinate is within button bounds
+      if(_yPos > _buttons[id].ulY && _yPos < _buttons[id].lrY ) {
+        //Touch is within button bouds
+        return 1;
+      }
+    }
+  }
+  return 0;
+}
+

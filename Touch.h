@@ -54,10 +54,11 @@ public:
   int yPos();
   int xStart();
   int yStart();
-  boolean setButton( char id, char type, int ulx, int uly, int lrx, int lry);
-
   boolean touched();
+  boolean setButton( char id, char type, int ulx, int uly, int lrx, int lry);
+  int readButton( char id );
   
+
 private:
   char _Y1;
   char _X2;
