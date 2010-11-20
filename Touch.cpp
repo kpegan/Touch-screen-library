@@ -26,18 +26,13 @@
 #include "WProgram.h"
 #include "Touch.h"
 
-Touch::Touch(char Y1, char X2, char  Y2, char X1, char nButs) {
+Touch::Touch( char Y1, char X2, char Y2, char X1 ) {
   _Y1 = Y1;
   _X2 = X2;
   _Y2 = Y2;
   _X1 = X1;
 
-  //Set the size of array of buttons
-  _numButtons = nButs;
-  button buttonArray[_numButtons];
-  _buttons = buttonArray;
-
-  for(int i = 0; i < _numButtons; i++) {
+  for(int i = 0; i < 20; i++) {
     _buttons[i].type = EMPTY;
     _buttons[i].value = -1;
     _buttons[i].ulX = 0;
@@ -111,12 +106,13 @@ boolean Touch::touched(){
 
 
 boolean Touch::setButton( char id, char type, int ulx, int uly, int lrx, int lry) {
-  if(id < _numButtons) {
+  if(id < 20) {
     _buttons[id].type = type;
     _buttons[id].ulX = ulx;
     _buttons[id].ulY = uly;
     _buttons[id].lrX = lrx;
     _buttons[id].lrY = lry;
+
     return true;
   } else {
     return false;

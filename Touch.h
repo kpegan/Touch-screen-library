@@ -48,7 +48,7 @@ class Touch
 {
 
 public:
-  Touch(char Y1, char X2, char Y2, char X1, char nButs);
+  Touch(char Y1, char X2, char Y2, char X1);
   void read();
   int xPos();
   int yPos();
@@ -71,7 +71,7 @@ private:
   int _yStart;
   boolean _touched;
   boolean _newTouch;
-  button* _buttons;
+  button _buttons[20];
   char _numButtons;
   
 };
