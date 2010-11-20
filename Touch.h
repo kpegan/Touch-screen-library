@@ -27,6 +27,7 @@
 
 #include "WProgram.h"
 
+//Button types
 enum {
   EMPTY,
   PUSH,
@@ -37,10 +38,10 @@ enum {
 typedef struct {
   char type;
   int value;
-  int ulX;
-  int ulY;
-  int lrX;
-  int lrY;
+  int ulX;     //upper left corner x position
+  int ulY;     //upper left corner y position
+  int lrX;     //lower right corner x position
+  int lrY;     //lower right corner y position
 } button;
 
 class Touch 
@@ -53,6 +54,8 @@ public:
   int yPos();
   int xStart();
   int yStart();
+  boolean setButton( char id, char type, int ulx, int uly, int lrx, int lry);
+
   boolean touched();
   
 private:

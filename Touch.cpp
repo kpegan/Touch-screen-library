@@ -44,7 +44,7 @@ Touch::Touch(char Y1, char X2, char  Y2, char X1, char nButs) {
     _buttons[i].ulY = 0;
     _buttons[i].lrX = 0;
     _buttons[i].lrY = 0;
- }
+  }
 
   _xPos = 1024;
   _yPos = 1024;
@@ -108,3 +108,18 @@ int Touch::yStart(){
 boolean Touch::touched(){
   return _touched;
 }
+
+
+boolean Touch::setButton( char id, char type, int ulx, int uly, int lrx, int lry) {
+  if(id < _numButtons) {
+    _buttons[id].type = type;
+    _buttons[id].ulX = ulx;
+    _buttons[id].ulY = uly;
+    _buttons[id].lrX = lrx;
+    _buttons[id].lrY = lry;
+    return true;
+  } else {
+    return false;
+  }
+}
+
