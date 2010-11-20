@@ -31,8 +31,9 @@
 enum {
   EMPTY,
   PUSH,
-  SLIDER,
-  SPIN
+  VSLIDER,
+  HSLIDER,
+  SPINNER
 };
 
 typedef struct {

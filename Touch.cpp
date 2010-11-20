@@ -126,6 +126,23 @@ int Touch::readButton( char id ) {
       //Check if Y coordinate is within button bounds
       if(_yPos > _buttons[id].ulY && _yPos < _buttons[id].lrY ) {
         //Touch is within button bouds
+        switch( _buttons[id].type ) {
+          case PUSH:
+            return 1;
+	    break;
+	  case VSLIDER:
+	    return  map(_yPos, _buttons[id].ulY, _buttons[id].lrY, 0, 255 );
+	    break;
+	  case HSLIDER:
+	    return map(_xPos, _buttons[id].ulX, _buttons[id].lrX, 0, 255 );
+	    break;
+	  case SPINNER:
+	    return 1;
+	    break;
+	  default:
+	    return 0;
+          
+        }
         return 1;
       }
     }
