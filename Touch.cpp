@@ -50,6 +50,10 @@ Touch::Touch( char Y1, char X2, char Y2, char X1 ) {
 }
 
 void Touch::read() {
+  //Save last x and y position
+  _xLast = _xPos; 
+  _yLast = _yPos;
+
   //Setup Y axis to reading value
   pinMode(_X1, INPUT);
   pinMode(_X2, INPUT);
@@ -68,8 +72,8 @@ void Touch::read() {
   digitalWrite(_X1, HIGH);
   digitalWrite(_X2, LOW);
   delay(1);
-  
-  _xPos = analogRead(_Y1);
+  _xPos = analogRead(_Y1);  //Read new xPos
+
   if(_xPos < 950 && _yPos < 950 ) {
     if(_newTouch) {
       _xStart = _xPos;
@@ -90,6 +94,14 @@ int Touch::xPos(){
 
 int Touch::yPos(){
   return _yPos;
+}
+
+int Touch::xLast(){
+  return _xLast;
+}
+
+int Touch::yLast(){
+  return _yLast;
 }
 
 int Touch::xStart(){
@@ -120,6 +132,7 @@ boolean Touch::setButton( char id, char type, int ulx, int uly, int lrx, int lry
 }
 
 int Touch::readButton( char id ) {
+  float xCenter, yCenter, angle, lastAngle, deltaAngle;
   if(_touched) {
     //Check if X coordinate is within button bounds
     if(_xPos > _buttons[id].ulX && _xPos < _buttons[id].lrX) {
@@ -137,6 +150,43 @@ int Touch::readButton( char id ) {
 	    return map(_xPos, _buttons[id].ulX, _buttons[id].lrX, 0, 255 );
 	    break;
 	  case SPINNER:
+            xCenter = ( _buttons[id].lrX - _buttons[id].ulX ) / 2 + _buttons[id].ulX;
+            yCenter = ( _buttons[id].lrY - _buttons[id].ulY ) / 2 + _buttons[id].ulY;
+            angle = atan2( _yPos - yCenter, _xPos - xCenter );
+            lastAngle = atan2( _yLast - yCenter, _xLast - xCenter );
+	    deltaAngle = angle - lastAngle;
+	    if(deltaAngle > 5) {
+	      deltaAngle = PI * 2 - deltaAngle;
+	    } else if (deltaAngle < -5) {
+	      deltaAngle += PI * 2 + deltaAngle;
+	    }
+	    Serial.print(" ulX ");
+	    Serial.print(_buttons[id].ulX, DEC);
+	    Serial.print(" ulY ");
+	    Serial.print(_buttons[id].ulY, DEC);
+	    Serial.print(" lrX ");
+	    Serial.print(_buttons[id].lrX, DEC);
+	    Serial.print(" lrY ");
+	    Serial.print(_buttons[id].lrY,DEC);
+	    Serial.print(" X ");
+	    Serial.print(_xPos, DEC);
+	    Serial.print(" Y ");
+	    Serial.print(_yPos, DEC);
+	    Serial.print(" cX ");
+	    Serial.print(xCenter, DEC);
+	    Serial.print(" cY ");
+	    Serial.print(yCenter, DEC);
+	    Serial.print(" lX ");
+	    Serial.print(_xLast, DEC);
+	    Serial.print(" ly");
+	    Serial.print(_yLast, DEC);
+	    Serial.print("  A ");
+	    Serial.print(angle,DEC);
+	    Serial.print("  L ");
+	    Serial.print(lastAngle,DEC);
+	    Serial.print("  D ");
+	    Serial.print(deltaAngle, DEC);
+	    Serial.println();
 	    return 1;
 	    break;
 	  default:
@@ -150,3 +200,6 @@ int Touch::readButton( char id ) {
   return 0;
 }
 
+float Touch::calcAngle(int x, int y, int xCenter, int yCenter) {
+  return 1.0;
+}

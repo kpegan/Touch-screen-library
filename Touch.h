@@ -51,15 +51,17 @@ class Touch
 public:
   Touch(char Y1, char X2, char Y2, char X1);
   void read();
-  int xPos();
-  int yPos();
-  int xStart();
-  int yStart();
-  boolean touched();
+  int xPos();           //Current X position
+  int yPos();           //Current Y position
+  int xLast();          //X position at last read()
+  int yLast();          //Y position at last read()
+  int xStart();         //X position at start of touch
+  int yStart();         //Y position at start of touch
+  boolean touched();    //Is the pad touched?
+
   boolean setButton( char id, char type, int ulx, int uly, int lrx, int lry);
   int readButton( char id );
   
-
 private:
   char _Y1;
   char _X2;
@@ -68,6 +70,8 @@ private:
   
   int _xPos;
   int _yPos;
+  int _xLast;
+  int _yLast;
   int _xStart;
   int _yStart;
   boolean _touched;
