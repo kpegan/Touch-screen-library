@@ -60,7 +60,7 @@ public:
   boolean touched();    //Is the pad touched?
 
   boolean setButton( char id, char type, int ulx, int uly, int lrx, int lry);
-  int readButton( char id );
+  float readButton( char id );
   
 private:
   char _Y1;

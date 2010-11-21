@@ -135,7 +135,7 @@ boolean Touch::setButton( char id, char type, int ulx, int uly, int lrx, int lry
   }
 }
 
-int Touch::readButton( char id ) {
+float Touch::readButton( char id ) {
   float xCenter, yCenter, angle, lastAngle, deltaAngle;
   if(_touched) {
     //Check if X coordinate is within button bounds
@@ -145,25 +145,33 @@ int Touch::readButton( char id ) {
         //Touch is within button bouds
         switch( _buttons[id].type ) {
           case PUSH:
-            return 1;
+            return 1.0;
 	    break;
 	  case VSLIDER:
-	    return  map(_yPos, _buttons[id].ulY, _buttons[id].lrY, 0, 255 );
+	    return map(_yPos, _buttons[id].ulY, _buttons[id].lrY, 0, 255 );
 	    break;
 	  case HSLIDER:
 	    return map(_xPos, _buttons[id].ulX, _buttons[id].lrX, 0, 255 );
 	    break;
 	  case SPINNER:
+	    //Spinner acts like a rotary encoder passing incremental change in value
+	    //Calculate the center of the button for rotation
             xCenter = ( _buttons[id].lrX - _buttons[id].ulX ) / 2 + _buttons[id].ulX;
             yCenter = ( _buttons[id].lrY - _buttons[id].ulY ) / 2 + _buttons[id].ulY;
+
+	    //determine current, last and difference angles
             angle = atan2( _yPos - yCenter, _xPos - xCenter );
             lastAngle = atan2( _yLast - yCenter, _xLast - xCenter );
 	    deltaAngle = angle - lastAngle;
+
+	    //correct if delta passes over upper/lower bound
 	    if(deltaAngle > 3.5) {
 	      deltaAngle = PI * 2 - deltaAngle;
 	    } else if (deltaAngle < -3.5) {
 	      deltaAngle = PI * 2 + deltaAngle;
 	    }
+
+	    /* DEBUGGING VALUES
 	    Serial.print(" ulX ");
 	    Serial.print(_buttons[id].ulX, DEC);
 	    Serial.print(" ulY ");
@@ -182,7 +190,7 @@ int Touch::readButton( char id ) {
 	    Serial.print(yCenter, DEC);
 	    Serial.print(" lX ");
 	    Serial.print(_xLast, DEC);
-	    Serial.print(" ly");
+	    Serial.print(" ly ");
 	    Serial.print(_yLast, DEC);
 	    Serial.print("  A ");
 	    Serial.print(angle,DEC);
@@ -191,16 +199,18 @@ int Touch::readButton( char id ) {
 	    Serial.print("  D ");
 	    Serial.print(deltaAngle, DEC);
 	    Serial.println();
-	    return 1;
+	    */
+
+	    return deltaAngle;
 	    break;
 	  default:
-	    return 0;
+	    return 0.0;
           
         }
-        return 1;
+        return 1.0;
       }
     }
   }
-  return 0;
+  return 0.0;
 }
 
