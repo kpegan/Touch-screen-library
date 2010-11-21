@@ -76,6 +76,10 @@ void Touch::read() {
 
   if(_xPos < 950 && _yPos < 950 ) {
     if(_newTouch) {
+      //If its first touch reset last position
+      //to current position to avoid stray readings
+      _xLast = _xPos;
+      _yLast = _yPos;
       _xStart = _xPos;
       _yStart = _yPos;
       _newTouch = false;
@@ -155,10 +159,10 @@ int Touch::readButton( char id ) {
             angle = atan2( _yPos - yCenter, _xPos - xCenter );
             lastAngle = atan2( _yLast - yCenter, _xLast - xCenter );
 	    deltaAngle = angle - lastAngle;
-	    if(deltaAngle > 5) {
+	    if(deltaAngle > 3.5) {
 	      deltaAngle = PI * 2 - deltaAngle;
-	    } else if (deltaAngle < -5) {
-	      deltaAngle += PI * 2 + deltaAngle;
+	    } else if (deltaAngle < -3.5) {
+	      deltaAngle = PI * 2 + deltaAngle;
 	    }
 	    Serial.print(" ulX ");
 	    Serial.print(_buttons[id].ulX, DEC);
@@ -200,6 +204,3 @@ int Touch::readButton( char id ) {
   return 0;
 }
 
-float Touch::calcAngle(int x, int y, int xCenter, int yCenter) {
-  return 1.0;
-}
